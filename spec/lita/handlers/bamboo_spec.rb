@@ -37,4 +37,13 @@ describe Lita::Handlers::Bamboo, lita_handler: true do
       #expect(replies.last).to match(/repositoryPath/)
     end
   end
+
+  describe '#get project plan results' do
+    #let(:robot) { Lita::Robot.new(registry) }
+    it 'fecth list of plan build results' do
+      send_command('bamboo list plan AG-FPMWIL results limit 2')
+      puts replies.last
+      #expect(replies.last).to match(/repositoryPath/)
+    end
+  end
 end
