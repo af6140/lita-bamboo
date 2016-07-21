@@ -1,6 +1,6 @@
 # lita-bamboo
 
-TODO: Add a description of the plugin.
+Lita bamboo build server handler.
 
 ## Installation
 
@@ -12,8 +12,14 @@ gem "lita-bamboo"
 
 ## Configuration
 
-TODO: Describe any configuration attributes the plugin exposes.
-
+```ruby
+Lita.configure do |config|
+  config.handlers.bamboo.url = "https://bamboo.example.com/rest/api/latest"  
+  config.handlers.bamboo.verify_ssl = false # default
+end
+```
 ## Usage
 
-TODO: Describe the plugin's features and how to use them.
+* bamboo list projects
+* bamboo list project PROJECT_KEY plans
+* bamboo list plan PLAN_KEY results limit 2

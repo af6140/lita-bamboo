@@ -26,7 +26,7 @@ module LitaBambooHelper
         json_response = JSON.parse(response)
         if json_response['plans']['plan']
           json_response['plans']['plan'].each do |plan|
-            info << "[#{plan['key']}] : #{plan['name']}"
+            info << "[#{plan['key']}] : #{plan['name']} Enabled: #{plan['enabled']}"
           end
         end
       rescue Exception=>e
