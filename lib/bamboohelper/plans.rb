@@ -1,4 +1,5 @@
 require 'json'
+require 'rest-client'
 module LitaBambooHelper
   module Plan
     def list_projects
@@ -64,32 +65,46 @@ module LitaBambooHelper
     end
 
     def queue_plan(plan_id)
-      url = "#{config.url}/queue/#{plan_id}"
+      url = "#{config.url}/queue/#{plan_id}?os_authType=basic"
       begin
-        response = RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :post)
+        response = RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :post, user: config.user, password: config.password)
         if response.code == 200
           true
         else
           false
         end
       rescue Exception=>e
-        raise "Error to queue paln for build :#{e.message}"
+        raise "Error to queue plan #{plan_id} for build :#{e.message}"
+      end
+    end
+
+    def dequeue_plan(build_id)
+      url = "#{config.url}/queue/#{build_id}?os_authType=basic"
+      begin
+        response = RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :delete, user: config.user, password: config.password)
+        if response.code == 200
+          true
+        else
+          false
+        end
+      rescue Exception=>e
+        raise "Error to dequeue plan build #{build_id} :#{e.message}"
       end
     end
 
     def list_queue()
-      url = "#{config.url}/queue?os_authType=basic"
+      url = "#{config.url}/queue.json?os_authType=basic"
       info = []
       begin
-        response = RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :get)
+        response = RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :get, user: config.user, password: config.password)
         json_response = JSON.parse(response)
-        if json_response['results']['result']
-          json_response['results']['result'].each do |result|
-            info << "[#{result['buildResultKey']}] : Successful=#{result['successful']} Finished=#{result['finished']} NotRunYet=#{result['notRunYet']} Start: #{result['prettyBuildStartedTime']} Complete: #{result['prettyBuildCompletedTime']}"
+        if json_response['queuedBuilds']['queuedBuild']
+          json_response['queuedBuilds']['queuedBuild'].each do |result|
+            info << "BuildKey: #{result['buildResultKey']} TrigerReason: #{result['triggerReason']} "
           end
         end
       rescue Exception=>e
-        raise "Error to list build results :#{e.message}"
+        raise "Error to list build queue :#{e.message}"
       end
       info
     end

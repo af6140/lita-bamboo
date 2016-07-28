@@ -23,3 +23,6 @@ end
 * bamboo list projects
 * bamboo list project PROJECT_KEY plans
 * bamboo list plan PLAN_KEY results limit 2
+* bamboo list queue
+* bamboo queue PLAN_KEY
+* bamboo dequeue BUILD_KEY

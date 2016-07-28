@@ -1,5 +1,10 @@
 # lita-bamboo Change Log
 
+### v0.1.2
+* list build queue
+* queue plan for build
+* dequeue plan from build queue
+
 ### v0.1.1
 * output changes for list plan and projects
 
