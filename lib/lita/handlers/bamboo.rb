@@ -110,7 +110,9 @@ module Lita
         build_id = response.matches[0][0]
         begin
           success = dequeue_plan(build_id)
-          unless success
+          if success
+            response.reply "Plan #{build_id} is queued for build."
+          else
             response.reply "Failed to dequeue plan build #{build_id}"
           end
         rescue Exception => e

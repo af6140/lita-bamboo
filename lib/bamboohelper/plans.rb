@@ -106,7 +106,7 @@ module LitaBambooHelper
       rescue Exception=>e
         raise "Error to list build queue :#{e.message}"
       end
-      info
+      info.to_s
     end
   end #module
 end

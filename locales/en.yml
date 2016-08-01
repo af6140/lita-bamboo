@@ -7,7 +7,7 @@ en:
           cmd_list_projects_value: 'List all build project'
           cmd_list_project_plans_key: 'bamboo list project PROJ_KYE plans'
           cmd_list_project_plans_value: 'List all plans in project'
-          cmd_list_plan_results_key: 'bamboo list plan LAN_KEY results limit LIMIT'
+          cmd_list_plan_results_key: 'bamboo list plan PLAN_KEY results limit LIMIT'
           cmd_list_plan_results_value: 'List plan build results last LIMIT'
           cmd_list_queue_key: 'bamboo list queue'
           cmd_list_queue_value: 'List what is in current build queue'
