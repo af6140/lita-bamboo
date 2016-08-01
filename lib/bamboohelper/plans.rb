@@ -108,5 +108,65 @@ module LitaBambooHelper
       end
       info.to_s
     end
+
+    def get_server_info
+      url = "#{config.url}/info.json?os_authType=basic"
+      info = {}
+      begin
+        response = RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :get, user: config.user, password: config.password)
+        info = JSON.parse(response)
+      rescue Exception=>e
+        raise "Error to get server info :#{e.message}"
+      end
+    end
+
+    def get_server_version
+      info = get_server_info
+      info['version']
+    end
+
+    def get_build_labels(build_id)
+      url = "#{config.url}/result/#{build_id}/label.json"
+      puts "lable  url is : #{url}"
+      info = []
+      begin
+        response = RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :get)
+        json_response = JSON.parse(response)
+        if json_response['labels']['label']
+          json_response['labels']['label'].each do |result|
+            info << "[#{result['name']}]"
+          end
+        end
+      rescue Exception=>e
+        raise "Error to list build queue :#{e.message}"
+      end
+      info.join(',')
+    end #def
+
+    def add_build_label(build_id, label)
+      url = "#{config.url}/result/#{build_id}/label"
+      payload = {'name' =>  "#{label}"}
+      puts "payload is #{payload}"
+      headers = {'Content-Type'=> 'application/json'}
+      puts "lable  url is : #{url}"
+      info = []
+      begin
+        RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :post, :payload =>payload, :headers => headers )
+        true
+      rescue Exception=>e
+        raise "Error to add label to build result :#{e.message}"
+      end
+    end #def
+
+    def delete_build_label(build_id, label)
+      url = "#{config.url}/result/#{build_id}/#{label}"
+      begin
+        RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :delete )
+        true
+      rescue Exception=>e
+        raise "Error to delete label from build result :#{e.message}"
+      end
+    end #def
+
   end #module
 end

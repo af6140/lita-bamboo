@@ -1,5 +1,9 @@
 # lita-bamboo Change Log
 
+### v0.1.4
+* show server info
+* get build result labels
+
 ### v0.1.3
 * list queue not proper output when queue is empty
 * Now when plan is queued successfully, show response with message

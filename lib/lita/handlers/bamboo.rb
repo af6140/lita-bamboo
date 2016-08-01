@@ -64,6 +64,34 @@ module Lita
         }
       )
 
+      route(
+       /^bamboo\s+get\s+label[s]?\s+(\S+)\s*$/,
+       :cmd_get_labels,
+       command: true,
+       help: {
+         t('help.cmd_get_labels_key') => t('help.cmd_get_labels_value')
+       }
+      )
+
+      route(
+       /^bamboo\s+add\s+label\s+(\S+)\s+to\s+(\S+)\s*$/,
+       :cmd_add_label,
+       command:true,
+       help: {
+         t('help.cmd_add_label_key') => t('help.cmd_add_label_value')
+       }
+      )
+
+      route(
+       /^bamboo\s+info\s*$/,
+       :cmd_get_info,
+       command: true,
+       help: {
+         t('help_cmd_get_info_key') => t('help_cmd_get_info_value')
+       }
+
+      )
+
       def cmd_list_projects(response)
         begin
           info = list_projects
@@ -124,6 +152,40 @@ module Lita
         begin
           info = list_queue
           response.reply info
+        rescue Exception => e
+          response.reply e.message
+        end
+      end
+
+      def cmd_get_labels(response)
+        build_id = response.matches[0][0]
+        begin
+          info = get_build_labels(build_id)
+          response.reply info
+        rescue Exception => e
+          response.reply e.message
+        end
+      end
+
+      def cmd_add_label(response)
+        build_id = response.matches[0][0]
+        label = response.matches[0][1]
+        begin
+          success = add_build_label(build_id, label)
+          if success
+            response.reply "Lable set successfully."
+          else
+            response.reply "Cannot set label"
+          end
+        rescue Exception => e
+          response.reply e.message
+        end
+      end
+
+      def cmd_get_info(response)
+        begin
+          info = get_server_info
+          response.reply info.to_s
         rescue Exception => e
           response.reply e.message
         end

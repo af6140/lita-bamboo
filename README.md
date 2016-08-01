@@ -26,3 +26,5 @@ end
 * bamboo list queue
 * bamboo queue PLAN_KEY
 * bamboo dequeue BUILD_KEY
+* bamboo info
+* bamboo get labels BUILD_KEY
