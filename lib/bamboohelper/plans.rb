@@ -127,7 +127,6 @@ module LitaBambooHelper
 
     def get_build_labels(build_id)
       url = "#{config.url}/result/#{build_id}/label.json"
-      puts "lable  url is : #{url}"
       info = []
       begin
         response = RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :get)
@@ -146,9 +145,7 @@ module LitaBambooHelper
     def add_build_label(build_id, label)
       url = "#{config.url}/result/#{build_id}/label"
       payload = {'name' =>  "#{label}"}
-      puts "payload is #{payload}"
       headers = {'Content-Type'=> 'application/json'}
-      puts "lable  url is : #{url}"
       info = []
       begin
         RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :post, :payload =>payload, :headers => headers )
