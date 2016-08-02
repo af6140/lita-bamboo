@@ -2,7 +2,7 @@
 
 ### v0.1.4
 * show server info
-* get build result labels
+* get build result labels, add label to and remove label from build results.
 
 ### v0.1.3
 * list queue not proper output when queue is empty

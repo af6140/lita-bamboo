@@ -17,6 +17,7 @@ describe Lita::Handlers::Bamboo, lita_handler: true do
     is_expected.to route_command('bamboo get labels PM-BUILDPM-195').to(:cmd_get_labels)
     is_expected.to route_command('bamboo info').to(:cmd_get_info)
     is_expected.to route_command('bamboo add label LABLE1 to GE-BUILD-1').to(:cmd_add_label)
+    is_expected.to route_command('bamboo delete label LABLE1 from GE-BUILD-1').to(:cmd_delete_label)
   end
 
   describe '#get all project list' do
@@ -46,23 +47,11 @@ describe Lita::Handlers::Bamboo, lita_handler: true do
     end
   end
 
-  describe '#get project plan results' do
-    #let(:robot) { Lita::Robot.new(registry) }
-    it 'fecth list of plan build results' do
-      send_command('bamboo list plan AG-FPMWIL results limit 2')
-      puts replies.last
-      #expect(replies.last).to match(/repositoryPath/)
-    end
-  end
-
-  describe '#get build queue' do
+  describe '#manage build queue' do
     it 'list build queue' do
       send_command('bamboo list queue')
       puts replies.last
     end
-  end
-
-  describe '#manges build queue' do
     it 'queue plan' do
       send_command('bamboo queue PM-RVMGEMSET')
       puts replies.last
@@ -87,6 +76,10 @@ describe Lita::Handlers::Bamboo, lita_handler: true do
     end
     it 'add label to build' do
       send_command('bamboo add label LABEL1 to TEST-PLAN-1')
+      puts replies.last
+    end
+    it 'delete label to build' do
+      send_command('bamboo delete label LABEL1 from TEST-PLAN-1')
       puts replies.last
     end
   end

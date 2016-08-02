@@ -83,6 +83,15 @@ module Lita
       )
 
       route(
+       /^bamboo\s+delete\s+label\s+(\S+)\s+from\s+(\S+)\s*$/,
+       :cmd_delete_label,
+       command:true,
+       help: {
+         t('help.cmd_add_label_key') => t('help.cmd_add_label_value')
+       }
+      )
+
+      route(
        /^bamboo\s+info\s*$/,
        :cmd_get_info,
        command: true,
@@ -175,7 +184,22 @@ module Lita
           if success
             response.reply "Lable set successfully."
           else
-            response.reply "Cannot set label"
+            response.reply "Cannot add label to build result."
+          end
+        rescue Exception => e
+          response.reply e.message
+        end
+      end
+
+      def cmd_delete_label(response)
+        build_id = response.matches[0][0]
+        label = response.matches[0][1]
+        begin
+          success = delete_build_label(build_id, label)
+          if success
+            response.reply "Lable deleted successfully."
+          else
+            response.reply "Cannot delete label from build result."
           end
         rescue Exception => e
           response.reply e.message

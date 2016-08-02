@@ -28,3 +28,5 @@ end
 * bamboo dequeue BUILD_KEY
 * bamboo info
 * bamboo get labels BUILD_KEY
+* bamboo add label LABEL to BUILD_KEY
+* bamboo delete label LABLE from BUILD_KEY
