@@ -87,4 +87,19 @@ describe Lita::Handlers::Bamboo, lita_handler: true do
     end
   end
 
+  describe '#manager server state' do
+    it 'pause server' do
+      send_command('bamboo pause')
+      puts replies.last
+    end
+    it 'resume server' do
+      send_command('bamboo resume')
+      puts replies.last
+    end
+    it 'prepare restart' do
+      send_command('bamboo prepare restart')
+      puts replies.last
+    end
+  end
+
 end
