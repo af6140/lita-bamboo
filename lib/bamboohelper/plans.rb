@@ -165,5 +165,35 @@ module LitaBambooHelper
       end
     end #def
 
+    def pause_server()
+      url = "#{config.url}/server/pause"
+      begin
+        RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :post, user: config.user, password: config.password)
+        true
+      rescue Exception=>e
+        raise "Error to pause bamboo server:#{e.message}"
+      end
+    end
+
+    def resume_server()
+      url = "#{config.url}/server/resume"
+      begin
+        RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :post, user: config.user, password: config.password)
+        true
+      rescue Exception=>e
+        raise "Error to resume bamboo server :#{e.message}"
+      end
+    end
+
+    def prepare_restart()
+      url = "#{config.url}/server/prepareForRestart"
+      begin
+        RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :put, user: config.user, password: config.password)
+        true
+      rescue Exception=>e
+        raise "Error to prepare bamboo server to restart :#{e.message}"
+      end
+    end
+
   end #module
 end

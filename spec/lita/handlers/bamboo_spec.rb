@@ -18,6 +18,9 @@ describe Lita::Handlers::Bamboo, lita_handler: true do
     is_expected.to route_command('bamboo info').to(:cmd_get_info)
     is_expected.to route_command('bamboo add label LABLE1 to GE-BUILD-1').to(:cmd_add_label)
     is_expected.to route_command('bamboo delete label LABLE1 from GE-BUILD-1').to(:cmd_delete_label)
+    is_expected.to route_command('bamboo pause').to(:cmd_pause)
+    is_expected.to route_command('bamboo resume').to(:cmd_resume)
+    is_expected.to route_command('bamboo prepare restart').to(:cmd_prepare_restart)
   end
 
   describe '#get all project list' do

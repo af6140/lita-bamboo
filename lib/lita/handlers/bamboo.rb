@@ -98,7 +98,33 @@ module Lita
        help: {
          t('help_cmd_get_info_key') => t('help_cmd_get_info_value')
        }
+      )
 
+      route(
+       /^bamboo\s+pause\s*$/,
+       :cmd_pause,
+       command: true,
+       help: {
+         t('help_cmd_pause_key') => t('help_cmd_pause_value')
+       }
+      )
+
+      route(
+       /^bamboo\s+resume\s*$/,
+       :cmd_resume,
+       command: true,
+       help: {
+         t('help_cmd_resume_key') => t('help_cmd_resume_value')
+       }
+      )
+
+      route(
+       /^bamboo\s+prepare\s+restart\s*$/,
+       :cmd_prepare_restart,
+       command: true,
+       help: {
+         t('help_cmd_prepare_restart_key') => t('help_cmd_prepare_restart_value')
+       }
       )
 
       def cmd_list_projects(response)
@@ -210,6 +236,33 @@ module Lita
         begin
           info = get_server_info
           response.reply info.to_s
+        rescue Exception => e
+          response.reply e.message
+        end
+      end
+
+      def cmd_pause(response)
+        begin
+          success= pause_server
+          response.reply "Server paused."
+        rescue Exception => e
+          response.reply e.message
+        end
+      end
+
+      def cmd_resume(response)
+        begin
+          success= resume_server
+          response.reply "Server resumed."
+        rescue Exception => e
+          response.reply e.message
+        end
+      end
+
+      def cmd_prepare_restart(response)
+        begin
+          success= prepare_restart
+          response.reply "Server prepared for restart."
         rescue Exception => e
           response.reply e.message
         end
