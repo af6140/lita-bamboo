@@ -6,7 +6,17 @@ module LitaBambooHelper
       url = "#{config.url}/project.json"
       info = []
       begin
-        response = RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :get)
+        response = RestClient::Request.execute(
+          :url => url,
+          :verify_ssl => config.verify_ssl,
+          :method=> :get,
+          :user => config.user,
+          :password => config.password,
+          :headers => {
+            :accept => :json,
+            :content_type => :json
+          }
+        )
         json_response = JSON.parse(response)
         if json_response['projects']['project']
           json_response['projects']['project'].each do |proj|
@@ -23,7 +33,17 @@ module LitaBambooHelper
       url = "#{config.url}/project/#{proj_id}.json?expand=plans"
       info = []
       begin
-        response = RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :get)
+        response = RestClient::Request.execute(
+          :url => url,
+          :verify_ssl => config.verify_ssl,
+          :method=> :get,
+          :user => config.user,
+          :password => config.password,
+          :headers => {
+            :accept => :json,
+            :content_type => :json
+          }
+        )
         json_response = JSON.parse(response)
         if json_response['plans']['plan']
           json_response['plans']['plan'].each do |plan|
@@ -45,7 +65,17 @@ module LitaBambooHelper
       url = "#{config.url}/result/#{plan_id}.json?expand=results[0:#{count}].result.labels"
       info = []
       begin
-        response = RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :get)
+        response = RestClient::Request.execute(
+          :url => url,
+          :verify_ssl => config.verify_ssl,
+          :method=> :get,
+          :user => config.user,
+          :password => config.password,
+          :headers => {
+            :accept => :json,
+            :content_type => :json
+          }
+        )
         json_response = JSON.parse(response)
         if json_response['results']['result']
           json_response['results']['result'].each do |result|
@@ -67,7 +97,17 @@ module LitaBambooHelper
     def queue_plan(plan_id)
       url = "#{config.url}/queue/#{plan_id}?os_authType=basic"
       begin
-        response = RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :post, user: config.user, password: config.password)
+        response = RestClient::Request.execute(
+          :url => url,
+          :verify_ssl => config.verify_ssl,
+          :method=> :post,
+          :user => config.user,
+          :password => config.password,
+          :headers => {
+            :accept => :json,
+            :content_type => :json
+          }
+        )
         if response.code == 200
           true
         else
@@ -81,7 +121,17 @@ module LitaBambooHelper
     def dequeue_plan(build_id)
       url = "#{config.url}/queue/#{build_id}?os_authType=basic"
       begin
-        response = RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :delete, user: config.user, password: config.password)
+        response = RestClient::Request.execute(
+          :url => url,
+          :verify_ssl => config.verify_ssl,
+          :method=> :delete,
+          :user => config.user,
+          :password => config.password,
+          :headers => {
+            :accept => :json,
+            :content_type => :json
+          }
+        )
         if response.code == 200
           true
         else
@@ -96,7 +146,17 @@ module LitaBambooHelper
       url = "#{config.url}/queue.json?os_authType=basic"
       info = []
       begin
-        response = RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :get, user: config.user, password: config.password)
+        response = RestClient::Request.execute(
+          :url => url,
+          :verify_ssl => config.verify_ssl,
+          :method=> :get,
+          :user => config.user,
+          :password => config.password,
+          :headers => {
+            :accept => :json,
+            :content_type => :json
+          }
+        )
         json_response = JSON.parse(response)
         if json_response['queuedBuilds']['queuedBuild']
           json_response['queuedBuilds']['queuedBuild'].each do |result|
@@ -113,7 +173,17 @@ module LitaBambooHelper
       url = "#{config.url}/info.json?os_authType=basic"
       info = {}
       begin
-        response = RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :get, user: config.user, password: config.password)
+        response = RestClient::Request.execute(
+          :url => url,
+          :verify_ssl => config.verify_ssl,
+          :method=> :get,
+          :user => config.user,
+          :password => config.password,
+          :headers => {
+            :accept => :json,
+            :content_type => :json
+          }
+        )
         info = JSON.parse(response)
       rescue Exception=>e
         raise "Error to get server info :#{e.message}"
@@ -129,7 +199,17 @@ module LitaBambooHelper
       url = "#{config.url}/result/#{build_id}/label.json"
       info = []
       begin
-        response = RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :get)
+        response = RestClient::Request.execute(
+          :url => url,
+          :verify_ssl => config.verify_ssl,
+          :method=> :get,
+          :user => config.user,
+          :password => config.password,
+          :headers => {
+            :accept => :json,
+            :content_type => :json
+          }
+        )
         json_response = JSON.parse(response)
         if json_response['labels']['label']
           json_response['labels']['label'].each do |result|
@@ -148,7 +228,15 @@ module LitaBambooHelper
       headers = {'Content-Type'=> 'application/json'}
       info = []
       begin
-        RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :post, :payload =>payload, :headers => headers )
+        RestClient::Request.execute(
+          :url => url,
+          :verify_ssl => config.verify_ssl,
+          :method=> :post,
+          :user => config.user,
+          :password => config.password,
+          :payload =>payload,
+          :headers => headers
+        )
         true
       rescue Exception=>e
         raise "Error to add label to build result :#{e.message}"
@@ -158,7 +246,17 @@ module LitaBambooHelper
     def delete_build_label(build_id, label)
       url = "#{config.url}/result/#{build_id}/#{label}"
       begin
-        RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :delete )
+        RestClient::Request.execute(
+          :url => url,
+          :verify_ssl => config.verify_ssl,
+          :method=> :delete,
+          :user => config.user,
+          :password => config.password,
+          :headers => {
+            :accept => :json,
+            :content_type => :json
+          }
+        )
         true
       rescue Exception=>e
         raise "Error to delete label from build result :#{e.message}"
@@ -168,7 +266,17 @@ module LitaBambooHelper
     def pause_server()
       url = "#{config.url}/server/pause"
       begin
-        RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :post, user: config.user, password: config.password)
+        RestClient::Request.execute(
+          :url => url,
+          :verify_ssl => config.verify_ssl,
+          :method=> :post,
+          :user => config.user,
+          :password => config.password,
+          :headers => {
+            :accept => :json,
+            :content_type => :json
+          }
+        )
         true
       rescue Exception=>e
         raise "Error to pause bamboo server:#{e.message}"
@@ -178,7 +286,17 @@ module LitaBambooHelper
     def resume_server()
       url = "#{config.url}/server/resume"
       begin
-        RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :post, user: config.user, password: config.password)
+        RestClient::Request.execute(
+          :url => url,
+          :verify_ssl => config.verify_ssl,
+          :method=> :post,
+          :user => config.user,
+          :password => config.password,
+          :headers => {
+            :accept => :json,
+            :content_type => :json
+          }
+        )
         true
       rescue Exception=>e
         raise "Error to resume bamboo server :#{e.message}"
@@ -188,7 +306,17 @@ module LitaBambooHelper
     def prepare_restart()
       url = "#{config.url}/server/prepareForRestart"
       begin
-        RestClient::Request.execute(:url => url, :verify_ssl => config.verify_ssl, :method=> :put, user: config.user, password: config.password)
+        RestClient::Request.execute(
+          :url => url,
+          :verify_ssl => config.verify_ssl,
+          :method=> :put,
+          :user => config.user,
+          :password => config.password,
+          :headers => {
+            :accept => :json,
+            :content_type => :json
+          }
+        )
         true
       rescue Exception=>e
         raise "Error to prepare bamboo server to restart :#{e.message}"
